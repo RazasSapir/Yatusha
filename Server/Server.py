@@ -1,14 +1,14 @@
 from flask import Flask, send_from_directory
 from pymongo import MongoClient
+from secret_keys.Private_URIs import MONGO_URI
+import flask_pymongo
+import mongoengine
 
 # Globals
 app = Flask(__name__)
 
 # Constants
-MONGO_URI = "mongodb://yatusha-db" \
-            ":1kkJmFQS0AMP2wN1l0bRrdSdB2C8SRDCqNpv1BmmctOuiCYYZ7mDhV88EKeB6xOV0i1kkFWsn0Yr18UfsRmyrg==@yatusha-db" \
-            ".mongo.cosmos.azure.com:10255/?ssl=true&retrywrites=false&replicaSet=globaldb&maxIdleTimeMS=120000" \
-            "&appName=@yatusha-db@ "
+ACTIVATE_SSL = False
 app.config["MONGO_URI"] = MONGO_URI
 app.config["MONGO_CLIENT"] = MongoClient(app.config["MONGO_URI"])
 
@@ -27,7 +27,11 @@ def hello_world():
 
 
 def main():
-    app.run(host=IP, port=PORT, debug=True)
+    if ACTIVATE_SSL:
+        context = ("../secret_keys/server.crt", "../secret_keys/server.key")
+        app.run(host=IP, port=PORT, debug=True, ssl_context=context)
+    else:
+        app.run(host=IP, port=PORT, debug=True)
 
 
 if __name__ == '__main__':
