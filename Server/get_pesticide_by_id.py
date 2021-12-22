@@ -20,18 +20,19 @@ def find_pesticide_by_key(key, value):
         print(doc)
 
     """
+    proofs of concepts:
+    
+prints only name, manufacturer and designation for pesticides that are for exterminators only, sorted by id in ascending order:
     extra_docs = collection.find({'general_public_permission': False},
                                  {'_id': 0, 'name': 1, 'manufacturer': 1,'designation': 1}).sort([('_id', pymongo.ASCENDING)])
     for doc in extra_docs:
         print(doc)
 
-    print()
-
+prints every pesticide that has an id number greater than 500 and its form is either ג'ל or אירוסול.
     extra_extra_docs = collection.find({'_id': {'$gt': 500}, 'form': {'$in': ['אירוסול', "ג'ל"]}})
     for doc in extra_extra_docs:
         print(doc)
 """
-
 
 
 def main():

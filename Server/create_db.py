@@ -3,7 +3,7 @@ import csv
 from datetime import datetime
 
 connect('pest_class')
-PATH = r'C:\Users\tomer\PycharmProjects\Yatusha\assets\pesticides.csv'
+PATH = r'..\assets\pesticides.csv'
 
 
 class Pesticide(Document):
@@ -36,7 +36,6 @@ def csv_to_mondo(path):
 
     for i in csv_reader:
         pesticide = Pesticide(i)
-
         pesticide.save()
 
 
