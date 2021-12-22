@@ -1,4 +1,5 @@
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, request, jsonify
+import requests
 from pymongo import MongoClient
 from secret_keys.Private_URIs import MONGO_URI
 import flask_pymongo
@@ -19,6 +20,20 @@ PORT = 80
 @app.route("/gsap.min.js")
 def gasp_js():
     return send_from_directory("../assets", "gsap.min.js")
+
+
+@app.route("/echo", methods=['POST'])
+def echo_page():
+    content = request.json
+    return jsonify(content)
+
+
+@app.route("/test_json")
+def test_json():
+    res = requests.post('http://localhost:80/echo', json={"mytext": "lalala"})
+    if res.ok:
+        return "Worked" + res.text
+    return res.ok
 
 
 @app.route("/")
