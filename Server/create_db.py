@@ -1,39 +1,43 @@
+from mongoengine import *
 import csv
 from datetime import datetime
-from pymongo import MongoClient
 
+connect('pest_class')
 PATH = r'C:\Users\tomer\PycharmProjects\Yatusha\assets\pesticides.csv'
 
 
-def create_dict(row):
-    return {'_id': int(row[2]),
-            'name': row[0],
-            'manufacturer': row[1],
-            'form': row[3],
-            'expiration_date': datetime.strptime(row[4], "%d/%m/%Y"),
-            'active_ingredients': row[5].split(", "),
-            'designation': row[6],
-            'general_public_permission': row[7] == 'הקהל הרחב'
-            }
+class Pesticide(Document):
+    name = StringField(required=True)
+    manufacturer = StringField(required=True)
+    _id = IntField(required=True, primary_key=True)
+    form = StringField(required=True)
+    expiration_date = DateField(required=True)
+    active_ingredients = ListField(required=True)
+    designation = StringField(required=True)
+    general_public_permission = BooleanField(required=True)
+    meta = {'collection': 'plz_work'}
+
+    def __init__(self, row):
+        super().__init__()
+        self.name = row[0]
+        self.manufacturer = row[1]
+        self._id = int(row[2])
+        self.form = row[3]
+        self.expiration_date = datetime.strptime(row[4], "%d/%m/%Y")
+        self.active_ingredients = row[5].split(", ")
+        self.designation = row[6]
+        self.general_public_permission = row[7] == 'הקהל הרחב'
 
 
 def csv_to_mondo(path):
-    client = MongoClient()
-    db = client.pest_test
-    collection = db.pest_test_collection
-
     file = open(path, 'r', encoding='utf8')
     csv_reader = csv.reader(file)
     header = next(csv_reader)
 
     for i in csv_reader:
-        pesticide = create_dict(i)
-        collection.insert_one(pesticide)
+        pesticide = Pesticide(i)
+
+        pesticide.save()
 
 
-def main():
-    csv_to_mondo(PATH)
-
-
-if __name__ == '__main__':
-    main()
+csv_to_mondo(PATH)

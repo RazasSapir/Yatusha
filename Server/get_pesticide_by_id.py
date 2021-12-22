@@ -15,14 +15,11 @@ def find_pesticide_by_key(key, value):
     elif key == 'general_public_permission':
         value = value == 'true'
 
-
-"""
-docs = collection.find({key: value}).sort([('_id', pymongo.ASCENDING)])
+    docs = collection.find({key: value}).sort([('_id', pymongo.ASCENDING)])
     for doc in docs:
         print(doc)
 
-    print()
-
+    """
     extra_docs = collection.find({'general_public_permission': False},
                                  {'_id': 0, 'name': 1, 'manufacturer': 1,'designation': 1}).sort([('_id', pymongo.ASCENDING)])
     for doc in extra_docs:
