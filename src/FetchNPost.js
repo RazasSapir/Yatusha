@@ -1,7 +1,7 @@
 function Post(data){
     fetch('localhost/echo', {
   method: "POST",
-  body: JSON.stringify(_data),
+  body: JSON.stringify(data),
   headers: {"Content-type": "application/json; charset=UTF-8"}
 })
 .then(response => response.json()) 
