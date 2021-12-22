@@ -24,6 +24,14 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
+
+        <form>
+          <label for="fname">First name:</label>
+          <input type="text" id="fname" name="fname"/><br/><br/>
+          <label for="lname">Last name:</label>
+          <input type="text" id="lname" name="lname"/><br/><br/>
+          <input type="submit" value="Submit"/>
+        </form>
       </header>
     </div>
   );
