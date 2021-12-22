@@ -1,1 +1,1 @@
-from pesticing_class import *
+from .pesticing_class import *
