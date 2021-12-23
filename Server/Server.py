@@ -20,7 +20,7 @@ app.config["MONGO_CLIENT"] = MongoClient(app.config["MONGO_URI"])
 IP = "127.0.0.1"
 PORT = 80
 MONGO_DB_PORT = 27017
-POST_TEST_URL = "http://localhost:80/delete/{obj_id}".format(obj_id=ObjectId("61c4b6438c3aa64414ed6fc7"))
+POST_TEST_URL = "http://localhost:80/delete/{obj_id}".format(obj_id=ObjectId("61c4bd371a7d5b3e9890eee4"))
 
 mongoengine.connect(host = IP, port = MONGO_DB_PORT)
 client = MongoClient(IP, MONGO_DB_PORT)
@@ -86,10 +86,16 @@ def update_db(query_id):
 def delete(query_id):
     try:
         query = Update_and_delete.delete_DB(obj_id=query_id)
+        temp_query = query
+        query_as_json = None
+        if temp_query is not None:
+            fixed_query = temp_query.pop('_id', None)
+            query_as_str = json.dumps(temp_query)
+            query_as_json = json.loads(query_as_str)
     except ValueError:
         abort(400, description="invalid update")
 
-    return jsonify(query)
+    return jsonify(query_as_json)
     
 
 def main():
