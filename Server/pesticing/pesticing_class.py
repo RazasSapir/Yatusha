@@ -3,9 +3,7 @@ from pymongo import *
 from datetime import datetime
 #import geojson
 
-DB_PORT = 80
-now = datetime.now()
-connect(host='0.0.0.0', port=DB_PORT)
+connect(host = "127.0.0.1", port = 27017)
 
 class PesticingToDB(Document):
 	name = StringField(min_length = 3)# at least 2 chars and one space
@@ -32,8 +30,10 @@ class PesticingToDB(Document):
 	 	self.pesticides_ID = pesticides_ID
 	 	self.additional_information = additional_information"""
 	
-	"""def to_dict(self):
+	def to_dict(self):
 		return {'name' : self.name, 'license_type' : str(self.license_type), \
 		'location' : str(self.location), 'place_type' : self.place_type, \
 		'pest_type' : self.pest_type, 'pesticides_ID' : self.pesticides_ID, \
-		'additional_information' : self.additional_information}"""
+		'additional_information' : self.additional_information}
+
+disconnect()

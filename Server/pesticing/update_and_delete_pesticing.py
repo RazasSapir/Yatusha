@@ -1,5 +1,5 @@
 from mongoengine import *
-from pesticing.pesticing_class import PesticingToDB
+from .pesticing_class import PesticingToDB
 
 
 
