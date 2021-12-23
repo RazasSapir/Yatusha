@@ -30,10 +30,10 @@ class PesticingToDB(Document):
 	 	self.pesticides_ID = pesticides_ID
 	 	self.additional_information = additional_information"""
 	
-	def to_dict(self):
+	"""def to_dict(self):
 		return {'name' : self.name, 'license_type' : str(self.license_type), \
 		'location' : str(self.location), 'place_type' : self.place_type, \
 		'pest_type' : self.pest_type, 'pesticides_ID' : self.pesticides_ID, \
-		'additional_information' : self.additional_information}
+		'additional_information' : self.additional_information}"""
 
-disconnect()
+"""disconnect()"""

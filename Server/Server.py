@@ -18,7 +18,7 @@ app.config["MONGO_CLIENT"] = MongoClient(app.config["MONGO_URI"])
 IP = "127.0.0.1"
 PORT = 80
 MONGO_DB_PORT = 27017
-POST_TEST_URL = "http://localhost:80/save"
+POST_TEST_URL = "http://localhost:80/update/61c4376fae925beab16149b7"
 
 mongoengine.connect(host = IP, port = MONGO_DB_PORT)
 
@@ -52,14 +52,28 @@ def hello_world():
 @app.route("/save", methods=['POST'])
 def save_db():
     data = request.json
-    #data = json.loads(json_as_str) # getting json as a dict
     try:
         add_pesticing_to_db = PesticingToDB(name = data['name'], license_type = data['license_type'], license_number = data['license_number'],\
             place_type = data['place_type'], pest_type = data['pest_type'], pesticides_ID = data['pesticides_ID'],\
              additional_information = data['additional_information'])
     except ValueError:
-        abort(400, description="invalid place type")
+        abort(400, description="invalid input")
     add_pesticing_to_db.save()
+    return jsonify(data)
+
+@app.route("/update/<obj_id>", methods=['POST'])
+def update_db(obj_id="61c4376fae925beab16149b7"):
+    data = request.json
+    try:
+        update_pesticing_in_db = None
+        obj_to_update_in_db = "additional_information"
+        obj_to_put_in_db = "additional_information"
+        Update_and_delete.update_DB(obj=update_pesticing_in_db, \
+                                    obj_to_change=obj_to_update_in_db, \
+                                    obj_to_put=obj_to_put_in_db)
+    except ValueError:
+        abort(400, description="invalid update")
+
     return jsonify(data)
     
 
