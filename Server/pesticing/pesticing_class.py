@@ -1,5 +1,11 @@
 from mongoengine import *
 
+# import geojson
+
+# TODO: Remove this connect
+connect(host="127.0.0.1", port=27017)
+
+# TODO: Add __init__ and validation check
 class PesticingToDB(Document):
     name = StringField(min_length=3)  # at least 2 chars and one space
     license_type = IntField(min_value=0, max_value=4)
@@ -13,20 +19,25 @@ class PesticingToDB(Document):
     additional_information = StringField()
     meta = {'collection': 'PestingActions'}
 
-    """def __init__(self, name, license_type, place_type, pest_type, pesticides_ID, additional_information):
-         self.name = name
-         self.license_type = license_type
-         self.location = location
-         if place_type in ("Private Place", "Public Space", "Nature"):
-             self.place_type = place_type
-         else:
-             raise ValueError("Invalid value")
-         self.pest_type = pest_type
-         self.pesticides_ID = pesticides_ID
-         self.additional_information = additional_information"""
 
-    """def to_dict(self):
-        return {'name' : self.name, 'license_type' : str(self.license_type), \
-        'location' : str(self.location), 'place_type' : self.place_type, \
-        'pest_type' : self.pest_type, 'pesticides_ID' : self.pesticides_ID, \
-        'additional_information' : self.additional_information}"""
+"""def __init__(self, name, license_type, place_type, pest_type, pesticides_ID, additional_information):
+     self.name = name
+     self.license_type = license_type
+     self.location = location
+     if place_type in ("Private Place", "Public Space", "Nature"):
+         self.place_type = place_type
+
+     else:
+         raise ValueError("Invalid value")
+
+     self.pest_type = pest_type
+     self.pesticides_ID = pesticides_ID
+     self.additional_information = additional_information"""
+
+"""def to_dict(self):
+    return {'name' : self.name, 'license_type' : str(self.license_type), \
+    'location' : str(self.location), 'place_type' : self.place_type, \
+    'pest_type' : self.pest_type, 'pesticides_ID' : self.pesticides_ID, \
+    'additional_information' : self.additional_information}"""
+
+"""disconnect()"""

@@ -1,8 +1,13 @@
+# TODO: put in a different module
+
 from mongoengine import *
 import csv
 from datetime import datetime
 
+
+# TODO: Remove this connect
 connect('pest_class')
+# TODO: Add PesticidesDB_CSV_PATH to Server Settings
 PATH = r'..\assets\pesticides.csv'
 
 
@@ -17,6 +22,7 @@ class Pesticide(Document):
     general_public_permission = BooleanField(required=True)
     meta = {'collection': 'plz_work'}
 
+    # TODO: Add validation checks
     def __init__(self, row):
         super().__init__()
         self.name = row[0]
@@ -39,4 +45,5 @@ def csv_to_mondo(path):
         pesticide.save()
 
 
+# TODO: this command and add it to server_config function in Server/Server.py
 csv_to_mondo(PATH)
