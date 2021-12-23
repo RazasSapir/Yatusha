@@ -9,7 +9,7 @@ class PesticingToDB(Document):
 	name = StringField(min_length = 3)# at least 2 chars and one space
 	license_type = IntField(min_value = 0, max_value = 4)
 	license_number = StringField()
-	#location = GeoJSON.point() # the location
+	#location = GeoPointField() # the location
 	#time = DateTimeField(default=now.strftime("%d/%m/%Y %H:%M:%S")) # the time of the Pesticing form
 	place_type = StringField(choices = ("Private Place", "Public Space", "Nature")) # touple of all place types that can be 
 	pest_type = StringField()
@@ -35,5 +35,3 @@ class PesticingToDB(Document):
 		'location' : str(self.location), 'place_type' : self.place_type, \
 		'pest_type' : self.pest_type, 'pesticides_ID' : self.pesticides_ID, \
 		'additional_information' : self.additional_information}"""
-
-"""disconnect()"""
