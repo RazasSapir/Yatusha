@@ -8,6 +8,7 @@ import json
 from pesticing import *
 from bson.objectid import ObjectId
 from geopy.geocoders import nominatim
+import http
 
 # Globals
 app = Flask(__name__)
@@ -20,7 +21,7 @@ app.config["MONGO_CLIENT"] = MongoClient(app.config["MONGO_URI"])
 IP = "127.0.0.1"
 PORT = 80
 MONGO_DB_PORT = 27017
-POST_TEST_URL = "http://localhost:80/delete/{obj_id}".format(obj_id=ObjectId("61c4bd371a7d5b3e9890eee4"))
+POST_TEST_URL = "http://localhost:80/delete/{obj_id}".format(obj_id=ObjectId("61c4fe681a3e3f61c3acb979"))
 
 mongoengine.connect(host = IP, port = MONGO_DB_PORT)
 client = MongoClient(IP, MONGO_DB_PORT)
@@ -44,7 +45,10 @@ def test_json():
         "place_type": "Public Space", "pest_type": "cricket", "pesticides_ID" : "1234",
             "additional_information": "abc"} #, "location": {"type": "Point", "coordinates": [location.latitude, location.longitude]}}
     res = requests.post(POST_TEST_URL, json=data)
-    if res.ok:
+    if res.status_code == 204:
+        return "No content"
+
+    elif res.ok:
         return "Worked" + res.text
     return str(res.ok)
 
@@ -92,8 +96,10 @@ def delete(query_id):
             fixed_query = temp_query.pop('_id', None)
             query_as_str = json.dumps(temp_query)
             query_as_json = json.loads(query_as_str)
+        else:
+            return '', http.HTTPStatus.NO_CONTENT
     except ValueError:
-        abort(400, description="invalid update")
+        abort(400, description="invalid delete")
 
     return jsonify(query_as_json)
     
