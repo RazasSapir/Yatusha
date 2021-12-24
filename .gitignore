@@ -239,3 +239,4 @@ lint/tmp/
 
 .idea
 secret_keys
+*.pem
