@@ -1,36 +1,46 @@
-from bson.objectid import ObjectId
+import collections
+
 from mongoengine import *
+from .pesticing_class import PesticingToDB
+from bson.objectid import ObjectId
 from pymongo import MongoClient
 
-# TODO: Remove and use mongoengine
-connect(host="127.0.0.1", port=27017)
+connect(host = "127.0.0.1", port = 27017)
 client = MongoClient("127.0.0.1", 27017)
 
+class Update_and_delete(Document):
+	@staticmethod
+	def update_DB(obj_to_change:str, obj_to_put, obj_id:str):
+		'''
+		function to update the specific query in our database
+		:param obj_to_change: the object we want to change
+		:param obj_to_put: the object we want to put
+		:param obj_id: the id of the query
+		:return: the updated query
+		'''
+		try:
+			db = client.test # getting the database
+			collection = db.pesticing_to_d_b # getting the collection
+			query_to_update = collection.find_one({'_id': ObjectId(obj_id)}) # find the query to update and put
+			# it inside dictionary
+			query_to_update[obj_to_change] = obj_to_put # put the object we want to put inside the database
+			res = collection.replace_one(collection.find_one({'_id': ObjectId(obj_id)}), query_to_update) # res is
+			# only for debugging not necessary to pus the function in a variable
+			return query_to_update # returns the updated query
 
-class Update_and_delete():
-    @staticmethod
-    def update_DB(obj_to_change: str, obj_to_put, obj_id: str):
-        # try:
-        db = client.database
-        collection = db.collection
-        query_to_update = collection.find_one({"_id": ObjectId(obj_id)})
-        objects = {"additional_information": query_to_update.additional_information,
-                   "license_number": query_to_update.license_number,
-                   "name": query_to_update.name,
-                   "license_type": query_to_update.license_type,
-                   "pest_type": query_to_update.pest_type,
-                   "pesticides_ID": query_to_update.pesticides_ID,
-                   "place_type": query_to_update.place_type}
-        query_to_update.update_one(objects[obj_to_change], obj_to_put)
 
-    # except Exception as e:
-    # raise ("Invalid update", e)
+		except ValueError as e: # check if the update is valid
+			raise ("Invalid update", e) # if not valid raise an error
 
-    '''def delete_DB(col, client, value_to_delete, mongo_client):
-        try:
-            db = mongo_client["user_data"]
-            db_col = db["col"]
+	@staticmethod
+	def delete_DB(obj_id:str):
+		try:
+			db = client.test
+			collection = db.pesticing_to_d_b
+			query_to_delete = collection.find_one({'_id': ObjectId(obj_id)})
+			collection.remove({"_id": ObjectId(obj_id)}, {'justOne': True})
 
-            db_col.delete_one(value_to_delete)
-        except Exception as e:
-            raise ("Invalid update", e)'''
+			return query_to_delete
+
+		except ValueError as e:
+			raise ("something went wrong", e)

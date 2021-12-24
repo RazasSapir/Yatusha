@@ -1,5 +1,3 @@
-# TODO: put in a different module
-
 from pymongo import MongoClient
 from datetime import datetime
 import pymongo
@@ -21,7 +19,6 @@ def find_pesticide_by_key(key, value):
     for doc in docs:
         print(doc)
 
-    # TODO: ADD checks to a "unit-test" directory
     """
     proofs of concepts:
     
