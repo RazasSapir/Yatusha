@@ -2,8 +2,9 @@ from mongoengine import *
 import csv
 from datetime import datetime
 
-connect('pest_class')
-PATH = r'..\assets\pesticides.csv'
+disconnect()
+connect('pesticidesDB')
+PATH = r'C:\Users\tomer\PycharmProjects\Yatusha\assets\pesticides.csv'
 
 
 class Pesticide(Document):
@@ -15,7 +16,7 @@ class Pesticide(Document):
     active_ingredients = ListField(required=True)
     designation = StringField(required=True)
     general_public_permission = BooleanField(required=True)
-    meta = {'collection': 'plz_work'}
+    meta = {'collection': 'pesticides'}
 
     def __init__(self, row):
         super().__init__()
