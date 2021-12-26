@@ -1,4 +1,5 @@
 function Post(data){
+    console.log(JSON.stringify(data));
     fetch('localhost/echo', {
   method: "POST",
   body: JSON.stringify(data),
