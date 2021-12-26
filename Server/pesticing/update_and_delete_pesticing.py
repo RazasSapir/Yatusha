@@ -5,7 +5,6 @@ from .pesticing_class import PesticingToDB
 from bson.objectid import ObjectId
 from pymongo import MongoClient
 
-disconnect()
 connect(host = "127.0.0.1", port = 27017)
 client = MongoClient("127.0.0.1", 27017)
 
