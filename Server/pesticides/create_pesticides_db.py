@@ -1,10 +1,13 @@
 from mongoengine import *
 import csv
 from datetime import datetime
+import os
 
 disconnect()
 connect('pesticidesDB')
-PATH = r'C:\Users\tomer\PycharmProjects\Yatusha\assets\pesticides.csv'
+
+# creates a path that will work for everyone
+PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', '..', 'assets', 'pesticides.csv'))
 
 
 class Pesticide(Document):
@@ -31,10 +34,12 @@ class Pesticide(Document):
 
 
 def csv_to_mondo(path):
+    # opens pesticides.csv:
     file = open(path, 'r', encoding='utf8')
     csv_reader = csv.reader(file)
-    header = next(csv_reader)
+    header = next(csv_reader)  # the first row in pesticides.csv is only titles so it is skipped, it is irrelevant
 
+    # saves every row in pesticides.csv as a document in the DB by turning them into Pesticide objects
     for i in csv_reader:
         pesticide = Pesticide(i)
         pesticide.save()
