@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory, request, jsonify, abort, abort
+from flask import Flask, send_from_directory, request, jsonify, abort, abort, Response
 import requests
 import mongoengine
 import json
@@ -92,10 +92,10 @@ def update_db(query_id):
 
 @app.route('/delete/<query_id>', methods=['POST'])
 def delete(query_id):
+    query_as_json = None
     try:
         query = Update_and_delete.delete_DB(obj_id=query_id)
         temp_query = query
-        query_as_json = None
         if temp_query is not None:
             fixed_query = temp_query.pop('_id', None)
             query_as_str = json.dumps(temp_query)
@@ -108,12 +108,24 @@ def delete(query_id):
     return jsonify(query_as_json)
 
 
+# Todo: Add docstring to all the method
+# Todo: Sdd typing to the variables
+# Todo: Create tests for each function
 @app.route("/pesticides/<pesticide_id>")
-def get_pesticide(pesticide_id):
+def get_pesticide(pesticide_id: int) -> Response:
+    """
+    Url for accessing the pesticidesDB, return a Response with the pesticide corresponding to "pesticide_id".
+    :raises: ValueError
+    :param pesticide_id: int - id of the wanted pesticide
+    :return: Response the pesticide data in JSON
+    """
     try:
-        pesticide = get_pesticide_by_id(int(pesticide_id))
+        pesticide: Document = get_pesticide_by_id(int(pesticide_id))
     except ValueError as e:
-        return "invalid id"
+        invalid_id_response = Response()
+        invalid_id_response.status_code = 400
+        invalid_id_response.data = "invalid id"
+        return invalid_id_response
     return jsonify(pesticide)
 
 
