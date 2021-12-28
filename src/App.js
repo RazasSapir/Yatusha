@@ -1,6 +1,8 @@
-import logo from './logoYatusha.jfif';
-import './App.css';
+import logo from './images/logoYatusha.jfif';
+import './style/App.css';
 import React from 'react';
+import HomePage from './components/HomePage';
+import Form from './components/Form'
 import {
   BrowserRouter as Router,
   Routes,
@@ -21,73 +23,51 @@ class RedirctLink extends React.Component{
 
 class App extends React.Component{
 
-  constructor(props){
-    super(props);
-     this.state={
-       first_name: "",
-       last_name: "",
-       list:[]
-     }
-  }
+  // constructor(props){
+  //   super(props);
+  //    this.state={
+  //      first_name: "",
+  //      last_name: "",
+  //      list:[]
+  //    }
+  // }
 
-  updateName(key, value){
-    //update react state
-    this.setState({
-      [key]: value
-    });
-    console.log("owo"); // for testing
-  }
+  // updateName(key, value){
+  //   //update react state
+  //   this.setState({
+  //     [key]: value
+  //   });
+  //   console.log("owo"); // for testing
+  // }
 
-  addItem(){
-    // create item with unic id
-      const newItem={
-      id: 1+Math.random(),
-      value: this.state.newItem.slice()
-    };
+  // addItem(){
+  //   // create item with unic id
+  //     const newItem={
+  //     id: 1+Math.random(),
+  //     value: this.state.newItem.slice()
+  //   };
 
-    //copy the current list
-    const list = [...this.state.list];
+  //   //copy the current list
+  //   const list = [...this.state.list];
 
-    //add new item
-    list.push(newItem);
+  //   //add new item
+  //   list.push(newItem);
 
-    //update state
-    this.setState({
-      list,
-      first_name: "",
-      last_name: ""
-    });
+  //   //update state
+  //   this.setState({
+  //     list,
+  //     first_name: "",
+  //     last_name: ""
+  //   });
 
-    console.log(list); //for testing
-  }
+  //   console.log(list); //for testing
+  // }
 
   render(){
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-  
-          <form>
-            <label htmlFor="fname">First name:</label>
-            <input type="text" id="fname" name="fname"
-            onChange={e=> this.updateName("first_name", e.target.value)}/>
-            <br/><br/>
-            <label htmlFor="lname">Last name:</label>
-            <input type="text" id="lname" name="lname"
-            onChange={e=> this.updateName("last_name", e.target.value)}/>
-            <br/><br/>
-            <input type="submit" value="Submit"/>
-            <ul>
-              {this.state.list.map(item=>{
-                return(
-                  <li key={item.id}>
-                    {item.value}
-                  </li>
-                )
-              })}
-            </ul>
-          </form>
-        </header>
+        {/* <Form /> */}
+        <HomePage />
       </div>
     );
   }
