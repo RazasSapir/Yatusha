@@ -114,10 +114,10 @@ def delete(query_id):
 @app.route("/pesticides/<pesticide_id>")
 def get_pesticide(pesticide_id: int) -> Response:
     """
-    Url for accessing the pesticidesDB, return a Response with the pesticide corresponding to "pesticide_id".
+    Url for accessing pesticidesDB, returns a Response with the pesticide corresponding to "pesticide_id".
     :raises: ValueError
     :param pesticide_id: int - id of the wanted pesticide
-    :return: Response the pesticide data in JSON
+    :return: Response - the pesticide data as JSON
     """
     try:
         pesticide: Document = get_pesticide_by_id(int(pesticide_id))
@@ -130,13 +130,25 @@ def get_pesticide(pesticide_id: int) -> Response:
 
 
 @app.route("/pesticides/<pesticide_id>/<field>")
-def get_pesticide_value(pesticide_id, field):
+def get_pesticide_value(pesticide_id: int, field: str) -> Response:
+    """
+    Url for accessing pesticidesDB, returns a Response with the value of the given field for the pesticide corresponding to "pesticide_id"
+    :param pesticide_id: int - id of the wanted pesticide
+    :param field: str - the wanted field
+    :return: Response - the value of the pesticide's field as JSON
+    """
     try:
         value = get_specific_pesticide_field(int(pesticide_id), field)
     except ValueError as e:
-        return "invalid id"
+        invalid_id_response = Response()
+        invalid_id_response.status_code = 400
+        invalid_id_response.data = "invalid id"
+        return invalid_id_response
     except KeyError as e:
-        return "invalid key"
+        invalid_id_response = Response()
+        invalid_id_response.status_code = 400
+        invalid_id_response.data = "invalid key"
+        return invalid_id_response
     return jsonify(value)
 
 

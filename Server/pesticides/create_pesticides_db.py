@@ -33,7 +33,12 @@ class Pesticide(Document):
         self.general_public_permission = row[7] == 'הקהל הרחב'
 
 
-def csv_to_mondo(path):
+def csv_to_mondo(path:  str) -> None:
+    """
+    Function for saving pesticides.csv to mongoDB
+    :param path: str - the path for the csv file
+    :return: nada
+    """
     # opens pesticides.csv:
     file = open(path, 'r', encoding='utf8')
     csv_reader = csv.reader(file)
