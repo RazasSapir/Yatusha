@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory, request, jsonify, abort, abort, Response
+from flask import Flask, send_from_directory, jsonify, abort, Response
 import requests
 import mongoengine
 import json
@@ -62,9 +62,9 @@ def save_db():
     data = request.json
     try:
         add_pesticing_to_db = PesticingToDB(name=data['name'], license_type=data['license_type'],
-                                            license_number=data['license_number'], \
+                                            license_number=data['license_number'],\
                                             place_type=data['place_type'], pest_type=data['pest_type'],
-                                            pesticides_ID=data['pesticides_ID'], \
+                                            pesticides_ID=data['pesticides_ID'],\
                                             additional_information=data['additional_information'])
     except ValueError:
         abort(400, description="invalid input")
@@ -77,9 +77,9 @@ def update_db(query_id):
     try:
         obj_to_update_in_db = "additional_information"
         obj_to_put_in_db = "additional_information"
-        query = Update_and_delete.update_DB(obj_to_change=obj_to_update_in_db, \
-                                            obj_to_put=obj_to_put_in_db, \
-                                            obj_id=query_id)
+        query = UpdateAndDelete.update_db(obj_to_change=obj_to_update_in_db, \
+                                          obj_to_put=obj_to_put_in_db, \
+                                          obj_id=query_id)
         temp_query = query
         fixed_query = temp_query.pop('_id', None)
         query_as_str = json.dumps(fixed_query)
@@ -94,7 +94,7 @@ def update_db(query_id):
 def delete(query_id):
     query_as_json = None
     try:
-        query = Update_and_delete.delete_DB(obj_id=query_id)
+        query = UpdateAndDelete.delete_db(obj_id=query_id)
         temp_query = query
         if temp_query is not None:
             fixed_query = temp_query.pop('_id', None)
