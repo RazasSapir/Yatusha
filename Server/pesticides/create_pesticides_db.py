@@ -1,13 +1,7 @@
-from mongoengine import *
 import csv
 from datetime import datetime
-import os
 
-disconnect()
-connect('pesticidesDB')
-
-# creates a path that will work for everyone
-PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', '..', 'assets', 'pesticides.csv'))
+from mongoengine import *
 
 
 class Pesticide(Document):
@@ -33,12 +27,13 @@ class Pesticide(Document):
         self.general_public_permission = row[7] == 'הקהל הרחב'
 
 
-def csv_to_mondo(path:  str) -> None:
+def csv_to_mondo(db, path: str) -> None:
     """
     Function for saving pesticides.csv to mongoDB
     :param path: str - the path for the csv file
     :return: nada
     """
+    collection = db.pesticides
     # opens pesticides.csv:
     file = open(path, 'r', encoding='utf8')
     csv_reader = csv.reader(file)
@@ -48,6 +43,3 @@ def csv_to_mondo(path:  str) -> None:
     for i in csv_reader:
         pesticide = Pesticide(i)
         pesticide.save()
-
-
-csv_to_mondo(PATH)

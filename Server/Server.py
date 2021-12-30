@@ -1,11 +1,13 @@
-from flask import Flask, send_from_directory, jsonify, abort, Response
-import requests
-import mongoengine
-import json
-from pesticing import *
-from pesticides import *
-from bson.objectid import ObjectId
 import http
+import json
+
+import mongoengine
+import pymongo
+import requests
+from flask import Flask, send_from_directory, jsonify, abort, Response, request
+
+from pesticides import *
+from pesticiding_action import *
 
 # Globals
 app = Flask(__name__)
@@ -14,16 +16,13 @@ app = Flask(__name__)
 ACTIVATE_SSL = False
 app.config["MONGO_URI"] = "MONGO_URI"
 app.config["MONGO_CLIENT"] = MongoClient(app.config["MONGO_URI"])
+app.config["PESTICIDES_CSV"] = os.path.realpath(
+    os.path.join(os.path.dirname(__file__), '..', 'assets', 'pesticides.csv'))
 
 IP = "127.0.0.1"
 PORT = 80
 MONGO_DB_PORT = 27017
 POST_TEST_URL = "http://localhost:80/delete/{obj_id}".format(obj_id=ObjectId("61c4fe681a3e3f61c3acb979"))
-
-disconnect()
-mongoengine.connect(host=IP, port=MONGO_DB_PORT)
-client = MongoClient(IP, MONGO_DB_PORT)
-
 
 @app.route("/gsap.min.js")
 def gasp_js():
@@ -61,15 +60,15 @@ def hello_world():
 def save_db():
     data = request.json
     try:
-        add_pesticing_to_db = PesticingToDB(name=data['name'], license_type=data['license_type'],
-                                            license_number=data['license_number'],\
-                                            place_type=data['place_type'], pest_type=data['pest_type'],
-                                            pesticides_ID=data['pesticides_ID'],\
-                                            additional_information=data['additional_information'])
+        add_pesticing_to_db = PesticidingAction(name=data['name'], license_type=data['license_type'],
+                                                license_number=data['license_number'],
+                                                place_type=data['place_type'], pest_type=data['pest_type'],
+                                                pesticides_ID=data['pesticides_ID'],
+                                                additional_information=data['additional_information'])
+        add_pesticing_to_db.save()
+        return jsonify(data)
     except ValueError:
         abort(400, description="invalid input")
-    add_pesticing_to_db.save()
-    return jsonify(data)
 
 
 @app.route("/update/<query_id>", methods=['POST'])
@@ -77,24 +76,23 @@ def update_db(query_id):
     try:
         obj_to_update_in_db = "additional_information"
         obj_to_put_in_db = "additional_information"
-        query = UpdateAndDelete.update_db(obj_to_change=obj_to_update_in_db, \
-                                          obj_to_put=obj_to_put_in_db, \
+        query = update_db(obj_to_change=obj_to_update_in_db,
+                                          obj_to_put=obj_to_put_in_db,
                                           obj_id=query_id)
         temp_query = query
         fixed_query = temp_query.pop('_id', None)
         query_as_str = json.dumps(fixed_query)
         query_as_json = json.loads(query_as_str)
+        return jsonify(query_as_json)
     except ValueError:
         abort(400, description="invalid update")
-
-    return jsonify(query_as_json)
 
 
 @app.route('/delete/<query_id>', methods=['POST'])
 def delete(query_id):
     query_as_json = None
     try:
-        query = UpdateAndDelete.delete_db(obj_id=query_id)
+        query = delete_db(db=app.config["YatushaDB"], obj_id=query_id)
         temp_query = query
         if temp_query is not None:
             fixed_query = temp_query.pop('_id', None)
@@ -108,9 +106,6 @@ def delete(query_id):
     return jsonify(query_as_json)
 
 
-# Todo: Add docstring to all the method
-# Todo: Sdd typing to the variables
-# Todo: Create tests for each function
 @app.route("/pesticides/<pesticide_id>")
 def get_pesticide(pesticide_id: int) -> Response:
     """
@@ -120,7 +115,7 @@ def get_pesticide(pesticide_id: int) -> Response:
     :return: Response - the pesticide data as JSON
     """
     try:
-        pesticide: Document = get_pesticide_by_id(int(pesticide_id))
+        pesticide: Document = get_pesticide_by_id(db=app.config["YatushaDB"], _id=int(pesticide_id))
     except ValueError as e:
         invalid_id_response = Response()
         invalid_id_response.status_code = 400
@@ -138,7 +133,7 @@ def get_pesticide_value(pesticide_id: int, field: str) -> Response:
     :return: Response - the value of the pesticide's field as JSON
     """
     try:
-        value = get_specific_pesticide_field(int(pesticide_id), field)
+        value = get_specific_pesticide_field(db=app.config["YatushaDB"], _id=int(pesticide_id), field=field)
     except ValueError as e:
         invalid_id_response = Response()
         invalid_id_response.status_code = 400
@@ -153,6 +148,11 @@ def get_pesticide_value(pesticide_id: int, field: str) -> Response:
 
 
 def main():
+    disconnect()
+    mongoengine.connect(host=IP, port=MONGO_DB_PORT, name="YatushaDebug")
+    client = pymongo.MongoClient('localhost', 27017)
+    app.config["YatushaDB"] = client['YatushaDebug']
+    csv_to_mondo(app.config["YatushaDB"], app.config["PESTICIDES_CSV"])
     if ACTIVATE_SSL:
         context = ("../secret_keys/server.crt", "../secret_keys/server.key")
         app.run(host=IP, port=PORT, debug=True, ssl_context=context)
