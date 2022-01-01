@@ -26,12 +26,10 @@
 
 .navbar p{
     margin: 0px;
-    padding: 0px;
+    padding: 1vh;
     display: inline-block;
-    box-sizing: border-box;
-    width: 12vw;
     height: 6vh;
-    border-radius: 5px;
+    border-radius: 1vmin;
     box-shadow: 3px 5px 6px rgba(0,0,0,.2);
     background-color: rgb(60, 100, 185);
     font-size: 5vmin;
