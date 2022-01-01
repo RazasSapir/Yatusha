@@ -10,9 +10,9 @@ export default function HomePage(){
             <div className="mainPage">
                 <img className ="imgYatusha" src = {yatushaLogo} alt = ""/>
                 <nav className = "navbar">
-                    <p>דף 2</p>
-                    <p onClick={() => navigate("/form")}>דף 1</p>
-                    <p>דף 3</p>
+                    <p>האזור האישי</p>
+                    <p onClick={() => navigate("/form")}>רישום הדברה</p>
+                    <p>תמיכה טכנית</p>
                 </nav>
                 <p className="about">{about}</p>
             </div>
