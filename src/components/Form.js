@@ -32,53 +32,39 @@ export default class Form extends React.Component{
         this.fields.forEach(element => {
             document.getElementById("element").value = '';
         });
-        
-        document.getElementById("lname").value = '';
-        document.getElementById("id").value = '';
-        document.getElementById("location").value = '';
     }
 
-    // FormQuestion({field_id, field_text, field_type}){
-    //     return(
-    //         <>
-    //             <label htmlFor={field_id}>{field_text}:</label>
-    //             <input type={field_type} id={field_id}
-    //             onChange={e=> this.updateField({field_id}, e.target.value)}/>
-    //         </>
-    //     )
-    // }
+    FormQuestion({context, field_id, field_text, field_type}){
+      console.log(field_id);
+      return(
+          <div className="form__question">
+              <input className="form__input" type={field_type} autoComplete="off" placeholder=" "
+              onChange={(e)=> context.updateField("first_name", e.target.value)}/>              
+              <label className="form__label" htmlFor={field_id}>{field_text}:</label>
+          </div>
+      );
+    }
 
     render(){
       return (
         <div className="form">
-{/* 
-            <this.FormQuestion field_id="fname" field_text={"שם פרטי"} field_type="text" />
-            <this.FormQuestion field_id="lname" field_text={"שם משפחה"} field_type="text" />
-            <this.FormQuestion field_id="id" field_text={"ת\"ז"} field_type="number" />
-            <this.FormQuestion field_id="location" field_text={"מיקום"} field_type="text" /> */}
+          <h1>תיעוד אירוע הדברה:</h1>
+          <div className="form__questions">
+            <this.FormQuestion context = {this} field_id="first_name" field_text={"שם פרטי"} field_type="text" />
+            <this.FormQuestion context = {this} field_id="last_name" field_text={"שם משפחה"} field_type="text" />
+            <this.FormQuestion context = {this} field_id="license" field_text={"מספר רישיון"} field_type="number" />
+            <this.FormQuestion context = {this} field_id="location" field_text={"מיקום"} field_type="text" />
+            <this.FormQuestion context = {this} field_id="pest" field_text={"מזיק"} field_type="text" />
+            <this.FormQuestion context = {this} field_id="substance" field_text={"תכשיר הדברה"} field_type="text" />
+            <this.FormQuestion context = {this} field_id="amount" field_text={"ריכוז"} field_type="text" />
+          </div>
 
-            <label htmlFor="fname">שם פרטי:</label>
-            <input type="text" id="fname" name="fname"
-            onChange={e=> this.updateField("first_name", e.target.value)}/>
-
-            <label htmlFor="lname">שם משפחה:</label>
-            <input type="text" id="lname" name="lname"
-            onChange={e=> this.updateField("last_name", e.target.value)}/>
-
-            <label htmlFor="lname">ת"ז:</label>
-            <input type="number" id="id" name="lname"
-            onChange={e=> this.updateField("id", e.target.value)}/>
-
-            <label htmlFor="lname">מיקום:</label>
-            <input type="text" id="location" name="lname"
-            onChange={e=> this.updateField("location", e.target.value)}/>
-
-            <button className="submit_btn" onClick={this.handleSubmit.bind(this)}>sub</button>
-            <br/>
-            <p>First name: {this.state.first_name}</p>
-            <p>Last name: {this.state.last_name}</p>
-            <p>Id: {this.state.id}</p>
-            <p>Location: {this.state.location}</p>
+          <button className="submit_btn" onClick={this.handleSubmit.bind(this)}>שליחה</button>
+          {/* <br/>
+          <p>First name: {this.state.first_name}</p>
+          <p>Last name: {this.state.last_name}</p>
+          <p>Id: {this.state.id}</p>
+          <p>Location: {this.state.location}</p> */}
         </div>
       );
     }
