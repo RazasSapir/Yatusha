@@ -1,4 +1,10 @@
+<<<<<<< HEAD
+from flask import Flask, send_from_directory, jsonify, abort, Response, render_template, request
+import requests
+import mongoengine
+=======
 import http
+>>>>>>> 74de792cb3ce482128351aed3f96d6fbbd1b6703
 import json
 
 import mongoengine
@@ -7,10 +13,18 @@ import requests
 from flask import Flask, send_from_directory, jsonify, abort, Response, request
 
 from pesticides import *
+<<<<<<< HEAD
+from bson.objectid import ObjectId
+import http
+import save_pesticides_csv
+
+# from users_login_and_logout import Register
+=======
 from pesticiding_action import *
+>>>>>>> 74de792cb3ce482128351aed3f96d6fbbd1b6703
 
 # Globals
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 
 # Constants
 ACTIVATE_SSL = False
@@ -22,8 +36,15 @@ app.config["PESTICIDES_CSV"] = os.path.realpath(
 IP = "127.0.0.1"
 PORT = 80
 MONGO_DB_PORT = 27017
-POST_TEST_URL = "http://localhost:80/delete/{obj_id}".format(obj_id=ObjectId("61c4fe681a3e3f61c3acb979"))
+POST_TEST_URL = "http://localhost:80/update/{obj_id}".format(obj_id=ObjectId("61c4fe781a3e3f61c3acb97b"))
 
+<<<<<<< HEAD
+disconnect()
+client = mongoengine.connect(host=IP, port=MONGO_DB_PORT)
+
+
+=======
+>>>>>>> 74de792cb3ce482128351aed3f96d6fbbd1b6703
 @app.route("/gsap.min.js")
 def gasp_js():
     return send_from_directory("../assets", "gsap.min.js")
@@ -51,6 +72,15 @@ def test_json():
     return str(res.ok)
 
 
+"""
+@app.route('/test_register', methods=['GET', 'POST'])
+def register_to_the_site():
+    form = Register()
+
+    return render_template('register.html', Register=form)
+    """
+
+
 @app.route("/")
 def hello_world():
     return send_from_directory("../assets", "Test.html")
@@ -60,6 +90,13 @@ def hello_world():
 def save_db():
     data = request.json
     try:
+<<<<<<< HEAD
+        add_pesticing_to_db = PesticingToDB(name=data['name'], license_type=data['license_type'],
+                                            license_number=data['license_number'],
+                                            place_type=data['place_type'], pest_type=data['pest_type'],
+                                            pesticides_ID=data['pesticides_ID'],
+                                            additional_information=data['additional_information'])
+=======
         add_pesticing_to_db = PesticidingAction(name=data['name'], license_type=data['license_type'],
                                                 license_number=data['license_number'],
                                                 place_type=data['place_type'], pest_type=data['pest_type'],
@@ -67,21 +104,28 @@ def save_db():
                                                 additional_information=data['additional_information'])
         add_pesticing_to_db.save()
         return jsonify(data)
+>>>>>>> 74de792cb3ce482128351aed3f96d6fbbd1b6703
     except ValueError:
         abort(400, description="invalid input")
 
 
 @app.route("/update/<query_id>", methods=['POST'])
 def update_db(query_id):
+    query_as_json = None
     try:
         obj_to_update_in_db = "additional_information"
+<<<<<<< HEAD
+        obj_to_put_in_db = "abc"
+        query = UpdateAndDelete.update_db(obj_to_change=obj_to_update_in_db,
+=======
         obj_to_put_in_db = "additional_information"
         query = update_db(obj_to_change=obj_to_update_in_db,
+>>>>>>> 74de792cb3ce482128351aed3f96d6fbbd1b6703
                                           obj_to_put=obj_to_put_in_db,
                                           obj_id=query_id)
         temp_query = query
-        fixed_query = temp_query.pop('_id', None)
-        query_as_str = json.dumps(fixed_query)
+        temp_id = temp_query.pop('_id')  # just to save the id
+        query_as_str = json.dumps(temp_query)
         query_as_json = json.loads(query_as_str)
         return jsonify(query_as_json)
     except ValueError:
@@ -148,11 +192,15 @@ def get_pesticide_value(pesticide_id: int, field: str) -> Response:
 
 
 def main():
+<<<<<<< HEAD
+    save_pesticides_csv.save_csv()  # added it to save the pesticides csv
+=======
     disconnect()
     mongoengine.connect(host=IP, port=MONGO_DB_PORT, name="YatushaDebug")
     client = pymongo.MongoClient('localhost', 27017)
     app.config["YatushaDB"] = client['YatushaDebug']
     csv_to_mondo(app.config["YatushaDB"], app.config["PESTICIDES_CSV"])
+>>>>>>> 74de792cb3ce482128351aed3f96d6fbbd1b6703
     if ACTIVATE_SSL:
         context = ("../secret_keys/server.crt", "../secret_keys/server.key")
         app.run(host=IP, port=PORT, debug=True, ssl_context=context)
