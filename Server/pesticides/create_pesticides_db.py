@@ -43,9 +43,6 @@ def csv_to_mondo(db, path: str) -> None:
     for i in csv_reader:
         pesticide = Pesticide(i)
         pesticide.save()
-<<<<<<< HEAD
 
 
 #csv_to_mondo(PATH)
-=======
->>>>>>> 74de792cb3ce482128351aed3f96d6fbbd1b6703
