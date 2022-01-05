@@ -15,9 +15,9 @@ def save_csv() -> None:
         dict_writer.writeheader()
         dict_writer.writerows(res)
 
-
-# for later (check if the file is updated)
-"""with open('pesticides.csv', 'r', newline='') as read_file:
+"""
+ for later (check if the file is updated)
+ with open('pesticides.csv', 'r', newline='') as read_file:
     dict_reader = csv.DictReader(read_file)
     # get a list of dictionaries from dct_reader
     a = list(dict_reader)
