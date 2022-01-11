@@ -1,8 +1,7 @@
 class QueryException(Exception):
-    __msg = ""
 
-    def __init__(self, msg=""):
-        self.__msg = msg
+    def __init__(self, msg="Invalid Query"):
+        self.message = msg
 
     def __str__(self):
-        return f"{self.__msg}"
+        return self.message

@@ -29,7 +29,7 @@ app.config['DEBUG'] = True
 IP = "127.0.0.1"
 PORT = 80
 MONGO_DB_PORT = 27017
-POST_TEST_URL = "http://localhost:80/save"  # /{obj_id}".format(obj_id=ObjectId("61c4fe781a3e3f61c3acb97b"))
+POST_TEST_URL = "http://localhost:80/update/{obj_id}".format(obj_id=ObjectId("61c4fe781a3e3f61c3acb97b"))
 
 disconnect()
 client = mongoengine.connect(host=IP, port=MONGO_DB_PORT)
@@ -100,13 +100,11 @@ def save_db():
 
 
 @app.route("/update/<query_id>", methods=['POST'])
-def update_db(query_id):
+def update(query_id):
     try:
-        obj_to_update_in_db = "additional_information"
+        obj_to_update_in_db = "aaa"
         obj_to_put_in_db = "abc"
-        update_db(obj_to_change=obj_to_update_in_db,
-                  obj_to_put_in_db="additional_information")
-        query = update_db(obj_to_change=obj_to_update_in_db,
+        query = update_db(db=client.YatushaDebug, obj_to_change=obj_to_update_in_db,
                           obj_to_put=obj_to_put_in_db,
                           obj_id=query_id)
         temp_query = query

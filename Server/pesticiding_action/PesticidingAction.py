@@ -2,7 +2,9 @@ from typing import Union
 
 from bson.objectid import ObjectId
 from mongoengine import *
-from Server.custom_exceptions import *
+# if the import don't work go to the venv and write "pip install -e custom_exceptions"
+from custom_exceptions import *
+
 
 class PesticidingAction(Document):
     name = StringField(min_length=3)  # at least 2 chars and one space
@@ -31,7 +33,7 @@ def update_db(db, obj_to_change: str, obj_to_put: Union[str, int], obj_id: str):
         query_to_update = collection.find_one({'_id': ObjectId(obj_id)})  # find the query to update and put
         # it inside dictionary
         if query_to_update is None:
-            raise QueryException(msg="Invalid obj_to_change")
+            raise QueryException
 
         if obj_to_change not in query_to_update:
             raise IndexError
@@ -45,6 +47,9 @@ def update_db(db, obj_to_change: str, obj_to_put: Union[str, int], obj_id: str):
 
     except IndexError as e:
         raise ("Invalid index", e)
+
+    except QueryException as e:
+        raise e
 
 
 def delete_db(db, obj_id: str):
