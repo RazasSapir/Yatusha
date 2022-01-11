@@ -246,4 +246,5 @@ lint/tmp/
 secret_keys
 *.pem
 
+# to add the custom exception go to the venv and write "pip install -e custom_exceptions" this is ignores the library info
 *.egg-info
