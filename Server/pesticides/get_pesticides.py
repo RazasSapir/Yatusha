@@ -9,6 +9,7 @@ def get_pesticide_by_id(db, _id: int) -> Document:
     :return: the pesticide's document as a dict
     """
     collection = db.pesticides
+
     return collection.find_one({"_id": _id})
 
 
