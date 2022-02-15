@@ -176,6 +176,23 @@ def get_pesticide_value(pesticide_id: int, field: str) -> Response:
     return jsonify(value)
 
 
+@app.route("/verify/<user_id>", methods=['POST, GET'])
+def verify_user(email: str)
+    """
+    Url for accessing the user's verification status, returns a Response with the user's verification status.
+    :param email: str - the user's email
+    :return: Response - the user's verification status as JSON
+    """
+    if get_user_verification_status(db=app.config["YatushaDB"], email=email):
+        user_verification_status =
+    except ValueError:
+        invalid_id_response = Response()
+        invalid_id_response.status_code = 400
+        invalid_id_response.data = "invalid id"
+        return invalid_id_response
+    return jsonify(user_verification_status)
+
+
 def main():
     save_csv()  # added it to save the pesticides csv
     disconnect()
